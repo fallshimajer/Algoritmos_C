@@ -13,8 +13,6 @@ void orden_maximo_arreglo(){
     for(j=0;j<10;j++){
 
       if(arreglo[j]>valorMaximo){
-        // printf("El valor maximo %d \n",arreglo[j]);
-        // printf("El valor J %d y de i %d \n",arreglo[j],j,i);
         valorMaximo=arreglo[j];
         arregloMaximo[i]=valorMaximo;
         posicion=j;
@@ -23,12 +21,9 @@ void orden_maximo_arreglo(){
       }
     }
     valorMaximo=0;
-    // printf("posicion: %d\n",posicion);
     arreglo[posicion]=0;
   }
-  // for(i=0;i<maximo;i++){
-  //   printf("El valor de arreglo en %d es :%d \n",i,arreglo[i]);
-  // }
+
 
   printf("La matriz ordena del valor maximo es:\n");
 
