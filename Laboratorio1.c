@@ -5,6 +5,7 @@ double** readFile();
 double** array2d(int n);
 int max();
 double**  reducirMatriz(double** matriz,int position,int size);
+double cleanMemory(double** matriz,int size);
 // double**  reducirMatriz(double** matriz,int size);
 
 double** readFile(){
@@ -93,9 +94,17 @@ double**  reducirMatriz(double** matriz,int position,int size){
   int i,j;
   double **matrizReducida;
   matrizReducida = (double **)malloc ((size-1)*sizeof(double *));
+  if (matrizReducida == NULL)
+	{
+		printf("No hay suficiente espacio en memoria");
+	}
   for (i=0;i<(size-1);i++)
   {
     matrizReducida[i] = (double*) malloc ((size-1)*sizeof(double));
+    if (matrizReducida[i] == NULL)
+  	{
+  		printf("No hay suficiente espacio en memoria");
+  	}
   }
   for(i=0;i<size;i++){
     for(j=1;j<size;j++){
@@ -108,54 +117,60 @@ double**  reducirMatriz(double** matriz,int position,int size){
       }
     }
   }
-
   return matrizReducida;
 
 }
 
-double determinante(double **matriz,int position, int size){
-  double det;
-  if(size==2){
-    return matriz[0][0] * matriz[1][1] - matriz[1][0] * matriz[0][1];
-  }else{
-    if(position<0){
-      return 0;
-    }else{
-      if(position%2==0){
-        det=matriz[position][0];
-      }else{
-        det=matriz[position][0] * -1;
-      }
-    }
+// double determinante(double **matriz,int position, int size){
+//   double det;
+//   if(size==2){
+//     return matriz[0][0] * matriz[1][1] - matriz[1][0] * matriz[0][1];
+//   }else{
+//     if(position<0){
+//       return 0;
+//     }else{
+//       if(position%2==0){
+//         det=matriz[position][0];
+//       }else{
+//         det=matriz[position][0] * -1;
+//       }
+//     }
+//   }
+//
+//
+//   return det * determinante(reducirMatriz(matriz,position,size),size-2,size-1) + determinante(matriz,position-1,size);
+// }
+
+double cleanMemory(double** matriz,int size){
+  int i;
+  for(i=0;i<size;i++)
+  {
+    free(matriz[i]);
   }
-
-
-  return det * determinante(reducirMatriz(matriz,position,size),size-2,size-1) + determinante(matriz,position-1,size);
+  free(matriz);
+  return 1;
 }
 
-// double determinante(int** matriz,int size){
-//   double det=0;
-//   int i;
-//   // printf("hola");
-//   if(size==2){
-//     // printf("calcular en 2 %d \n",matriz[0][0] * matriz[1][1] - matriz[1][0] * matriz[0][1]);
-//     return matriz[0][0] * matriz[1][1] - matriz[1][0] * matriz[0][1];
-//
-//   }else{
-//     for(i=size-1;i>=0;i--){
-//       // printf("primer paso\n");
-//       // printf("i : %d\n",i);
-//       // printf("A : %d\n",matriz[i][0]);
-//       if(i%2==0){
-//         det=det + matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
-//       }else{
-//         det=det + -1 * matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
-//       }
-//       // printf("det : %lf\n",det);
-//     }
-//     return det;
-//   }
-// }
+double determinante(double** matriz,int size){
+  double det=0;
+  // double** reducida;
+  int i;
+  if(size==2){
+    return (matriz[0][0] * matriz[1][1] - matriz[1][0] * matriz[0][1])*cleanMemory(matriz,size);
+
+  }else{
+    for(i=size-1;i>=0;i--){
+      // reducida=reducirMatriz(matriz,i,size);
+      if(i%2==0){
+        det=det + matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
+      }else{
+        det=det + -1 * matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
+      }
+    }
+    cleanMemory(matriz,size);
+    return det;
+  }
+}
 
 // determinante(reducirMatriz(matriz,i,size),size-1)
 
@@ -165,8 +180,8 @@ int main() {
   double det;
   double ** matriz = readFile();
   mostrarMatriz(matriz,maximo);
-  det=determinante(matriz,maximo-1,maximo);
-  // det=determinante(matriz,maximo);
+  // det=determinante(matriz,maximo-1,maximo);
+  det=determinante(matriz,maximo);
   printf("%lf ",det);
   return 0;
 }
