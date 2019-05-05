@@ -1,6 +1,9 @@
 #include <stdio.h>
 // #include <math.h>
 
+
+void *malloc(size_t size)
+
 void orden_maximo_arreglo(){
 
   int arreglo[10] = {0,1,2,3,12,5,6,7,8,9};

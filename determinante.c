@@ -27,11 +27,6 @@ int **  reducirMatriz(int** matriz,int position,int size){
     printf("\n");
   }
 
-  // for(i=0;i<size;i++){
-  //   free(matriz[i]);
-  // }
-  // free(matriz);
-
   return matrizReducida;
 
 }
@@ -79,11 +74,4 @@ int main(){
   }
   det=determinante(matriz,9,10);
   printf("%d ",det);
-  // matriz=reducirMatriz(matriz,2,3);
-  // for(i=0;i<2;i++){
-  //   for(j=0;j<2;j++){
-  //     printf("%d ",matriz[i][j]);
-  //   }
-  //   printf("\n");
-  // }
 }

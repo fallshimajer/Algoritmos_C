@@ -6,7 +6,8 @@ double** array2d(int n);
 int max();
 double**  reducirMatriz(double** matriz,int position,int size);
 double cleanMemory(double** matriz,int size);
-// double**  reducirMatriz(double** matriz,int size);
+
+//Función para leer el archivo datos.#include "Salida: genera una matriz del archivo datos.in"
 
 double** readFile(){
   FILE* file = fopen("datos.in","rt");
@@ -27,6 +28,8 @@ double** readFile(){
   }
 }
 
+//Funcion para obtener el tamaño de la matriz, "Salida: valor con el tamaño de tipo int"
+
 int max(){
   int count;
   FILE* file = fopen("datos.in","rt");
@@ -38,6 +41,8 @@ int max(){
   }
   return count;
 }
+
+//Función para crear una matriz de dos dimensiones, "Entrada: entero con el tamaño de la matriz", "Salida: matriz dinamica"
 
 double** array2d(int n){
   double **matriz;
@@ -53,6 +58,8 @@ double** array2d(int n){
   return matriz;
 }
 
+//Imprime en pantalla la matriz, "Entrada: matriz,tamaño de matriz"
+
 void mostrarMatriz(double** matriz,int n){
   int i,j;
   for(i=0;i<n;i++){
@@ -63,32 +70,7 @@ void mostrarMatriz(double** matriz,int n){
   }
 }
 
-// int determinante(int ** matriz,int max){
-//   int i,j,k,x,det,count,count2;
-//
-//     det=1;
-//     for (j=0;j<max;j++)
-//     {
-//       count=0;
-//       for(i=0+j;i<max-1;i++){
-//         if(count==0){
-//           det=det*matriz[i][j];
-//           printf("%d n",det);
-//           count++;
-//           count2=0+j;
-//         }
-//           printf("por aqui");
-//           x=(matriz[i+1][j] * -1)/matriz[count2][j];
-//           printf("%d r",x);
-//           for(k=0+j;k<max;k++){
-//             matriz[i+1][k+j]=matriz[i+1][k+j]+matriz[count2][k+j]*x;
-//             printf("%d o",matriz[i+1][k+j]);
-//         }
-//       }
-//     }
-//
-//   return det;
-// }
+//Reduce en una dimensión, "Entrada: matriz,posición es la fila que no se considera para crear la matriz reducia, size es el tamaño de la matriz original"
 
 double**  reducirMatriz(double** matriz,int position,int size){
   int i,j;
@@ -121,25 +103,7 @@ double**  reducirMatriz(double** matriz,int position,int size){
 
 }
 
-// double determinante(double **matriz,int position, int size){
-//   double det;
-//   if(size==2){
-//     return matriz[0][0] * matriz[1][1] - matriz[1][0] * matriz[0][1];
-//   }else{
-//     if(position<0){
-//       return 0;
-//     }else{
-//       if(position%2==0){
-//         det=matriz[position][0];
-//       }else{
-//         det=matriz[position][0] * -1;
-//       }
-//     }
-//   }
-//
-//
-//   return det * determinante(reducirMatriz(matriz,position,size),size-2,size-1) + determinante(matriz,position-1,size);
-// }
+// limpia la memoria de una matriz, "Entrada: matriz, tamaño de matriz"
 
 double cleanMemory(double** matriz,int size){
   int i;
@@ -151,28 +115,31 @@ double cleanMemory(double** matriz,int size){
   return 1;
 }
 
+// Calcula el determinante como el metodo de laPlace, en el retorno obtiene el cofactor y lo multiplica por la función determinante con la matriz reducida
+// "Entrada: matriz, tamaño de matriz", "Salida: retorna el calculo del determinante.", no admite
 double determinante(double** matriz,int size){
   double det=0;
-  // double** reducida;
   int i;
   if(size==2){
     return (matriz[0][0] * matriz[1][1] - matriz[1][0] * matriz[0][1])*cleanMemory(matriz,size);
-
   }else{
-    for(i=size-1;i>=0;i--){
-      // reducida=reducirMatriz(matriz,i,size);
-      if(i%2==0){
-        det=det + matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
-      }else{
-        det=det + -1 * matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
+    if(size==1){
+      return matriz[0][0]*cleanMemory(matriz,size);
+    }else{
+      for(i=size-1;i>=0;i--){
+        if(i%2==0){
+          det=det + matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
+        }else{
+          det=det + -1 * matriz[i][0] * determinante(reducirMatriz(matriz,i,size),size-1);
+        }
       }
+
     }
     cleanMemory(matriz,size);
     return det;
   }
 }
 
-// determinante(reducirMatriz(matriz,i,size),size-1)
 
 int main() {
   int maximo=max();
@@ -180,8 +147,8 @@ int main() {
   double det;
   double ** matriz = readFile();
   mostrarMatriz(matriz,maximo);
-  // det=determinante(matriz,maximo-1,maximo);
+  printf("\n");
   det=determinante(matriz,maximo);
-  printf("%lf ",det);
+  printf("El valor del determinante es: %0.lf",det);
   return 0;
 }
