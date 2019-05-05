@@ -76,6 +76,7 @@ int main(){
   {
     matriz[i] = (int*) malloc (n*sizeof(int));
   }
+<<<<<<< HEAD
   // for(i=0;i<n;i++){
   //   for(j=0;j<n;j++){
   //     matriz[i][j]=j+1+(i*n);
@@ -111,4 +112,15 @@ int main(){
   det=determinante(matriz,n);
   printf("El determinante es %d",det);
   return 0;
+=======
+  for(i=0;i<10;i++){
+    for(j=0;j<10;j++){
+      matriz[i][j]=j+1+(i*10);
+      printf("%d ",matriz[i][j]);
+    }
+    printf("\n");
+  }
+  det=determinante(matriz,9,10);
+  printf("%d ",det);
+>>>>>>> 25df477b776afeb9573abf3624c982391c256584
 }
