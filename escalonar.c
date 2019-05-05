@@ -64,18 +64,30 @@ float** escalonarAbajo(float ** matriz,int cols,int rows,int size,int position){
   return matriz;
 }
 
+<<<<<<< HEAD
 float** matrizReduccion(float ** matriz,int cols,int rows, int size){
+=======
+float** matrizReduccionArriba(float ** matriz,int cols,int rows, int size,int position){
+>>>>>>> d480e202f1efa9447b9630a30c5b4830f9db2488
   int i,j;
   if(cols+1==size){
     printf("%f ",matriz[cols][rows]);
   }else {
+<<<<<<< HEAD
     for(i=cols;i<size;i++){
+=======
+    for(i=cols;i<position;i++){
+>>>>>>> d480e202f1efa9447b9630a30c5b4830f9db2488
       for(j=rows;j<size;j++){
         printf("%f ",matriz[i][j]);
       }
       printf("\n");
     }
+<<<<<<< HEAD
     return matrizReduccion(matriz,cols+1,rows+1,size);
+=======
+    return matriz;
+>>>>>>> d480e202f1efa9447b9630a30c5b4830f9db2488
   }
 }
 
@@ -108,7 +120,11 @@ int main(){
     printf("\n");
   }
 
+<<<<<<< HEAD
   matrizReduccion(matriz,0,0,3);
+=======
+  matrizReduccion(matriz,1,1,3);
+>>>>>>> d480e202f1efa9447b9630a30c5b4830f9db2488
   // escalonarArriba(matriz,1,1,3,2);
   // escalonarAbajo(matriz,0,0,3,0);
 
