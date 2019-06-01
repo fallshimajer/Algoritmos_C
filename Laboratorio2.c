@@ -18,11 +18,7 @@ typedef struct List {
   int row;
   struct List* next;
   struct List* previous;
-<<<<<<< HEAD
   struct ListNode* listNode;
-=======
-  struct Node* header;
->>>>>>> c7873124a0374480743c485d40730701933f54b7
 }List;
 
 void welcome(){
@@ -47,20 +43,12 @@ ListNode* createListNode(){
   return listNode;
 }
 
-<<<<<<< HEAD
 List* createList(){
   List* list = (List*) malloc(sizeof(List));
   list->row = 0;
   list->listNode = NULL;
   list->next = NULL;
   list->previous = NULL;
-=======
-List* createList(int row, Node* node){
-  List* list = (List*) malloc(sizeof(List));
-  list->next=NULL;
-  list->previous=NULL;
-  list->header=node;
->>>>>>> c7873124a0374480743c485d40730701933f54b7
   return list;
 }
 
@@ -76,7 +64,6 @@ void insertNode(ListNode* listNode, Node* node){
         listNode->footer= node;
         listNode->size++;
         printf("else\n");
-<<<<<<< HEAD
     }
 }
 
@@ -143,19 +130,10 @@ List* readFile(){
     }
   }
   return list;
-=======
-    }
-    // if(listNode->header){
-    //   printf("hola\n");
-    // }else{
-    //   printf("El valor de : %d\n",listNode->size);
-    // }
->>>>>>> c7873124a0374480743c485d40730701933f54b7
 }
 
 int main(){
   welcome();
-<<<<<<< HEAD
   // ListNode* ln1 = createListNode();
   // int i,num;
   // Node* node;
@@ -182,24 +160,5 @@ int main(){
   printf("%.0lf\n",l1->next->next->next->listNode->header->num);
   // printf("El valor es %d",ln1->size);
   // printf("EL valor de la ultima posicion es: %lf",ln1->footer);
-=======
-  ListNode* ln1 = createListNode();
-  Node* node = createNode(0,1);
-  Node* node2 = createNode(1,2);
-  Node* node3 = createNode(2,4);
-  insertNode(ln1,node);
-  insertNode(ln1,node2);
-  insertNode(ln1,node3);
-  printf("El valor es %d",ln1->size);
-  // if (ln1->header == NULL){
-  //   printf("es null\n");
-  // }else{
-  //   printf("no es null\n");
-  // }
-  // insertNode(ln1,node2);
-  // printf("el valor de size es %d \n",ln1->size);
-  // Node* node = createNode(0,1);
-  // printf("el valor es %lf",node->num);
->>>>>>> c7873124a0374480743c485d40730701933f54b7
   return 0;
 }
