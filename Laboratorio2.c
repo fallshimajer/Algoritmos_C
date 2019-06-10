@@ -21,7 +21,7 @@ typedef struct List {
   struct ListNode* listNode;
 }List;
 
-double selectPos(List* list,int row,int cols);
+double selectPos(List* list,int row,int cols,int size);
 
 void welcome(){
   printf("Bienvenido\n");
@@ -55,18 +55,18 @@ List* createList(){
 }
 
 void insertNode(ListNode* listNode, Node* node){
-    printf("iniciando\n");
+    // printf("iniciando\n");
     if(listNode->header == NULL && listNode->footer == NULL){
         listNode->header = node;
         listNode->footer = node;
         listNode->size++;
-        printf("if\n");
+        // printf("if\n");
     }else{
         listNode->footer->next = node;
         node->previous = listNode->footer;// se agrega anterior
         listNode->footer= node;
         listNode->size++;
-        printf("else\n");
+        // printf("else\n");
     }
 }
 
@@ -121,7 +121,7 @@ List* readFile(){
       listNode = createListNode();
       for(j=0;j<count;j++){
         fscanf(file,"%lf",&num);
-        printf("num : %lf\n",num);
+        // printf("num : %lf\n",num);
 
         if (num != 0){
           node= createNode(j,num);
@@ -131,7 +131,7 @@ List* readFile(){
         // printf("El valor de size : %d\n",listNode->size);
       }
 
-      printf("el valor de row enviado es %d\n",i);
+      // printf("el valor de row enviado es %d\n",i);
       if(listNode->header){
         insertList(list,listNode,i);
         listNode = NULL;
@@ -159,9 +159,11 @@ int readPow(){
   FILE* file = fopen("datos.in","rt");
   if(file != NULL){
     fscanf(file,"%d",&pow);
+    fscanf(file,"%d",&pow);
   }else{
     printf("Hay un error al cargar el archivo, al obtener el pow");
   }
+  return pow;
 }
 
 void printList(List* list){
@@ -188,63 +190,21 @@ void printList(List* list){
   printf("%0.lf \n", pointer2->num);
 }
 
-void deleteList(List* list){
-  
-}
-
-// void printList(List* list){
-//   int count;
-//   List* pointer = list;
-//   Node* pointer2;
-//
-//   do {
-//       pointer2 = pointer->listNode->header;
-//       do{
-//         printf("%0.lf ",pointer2->num);
-//         pointer2= pointer2->next;
-//         printf("hola2");
-//         if(count == 1){
-//           count++;
-//         }else{
-//           if(pointer2->next == NULL){
-//             count=1;
-//           }
-//         }
-//       }while(count!=2);
-//       count=0;
-//       printf("\n");
-//       pointer = pointer->next;
-//       printf("hola");
-//   }while(pointer->next);
-//
-//
-// }
-
 double calculate(List* list1, List* list2, int row,int col,int size){
   int i;
   double cal = 0;
   for(i=0;i<size;i++){
-    cal = cal + selectPos(list1,row,i) * selectPos(list2,i,col);
+    cal = cal + selectPos(list1,row,i,size) * selectPos(list2,i,col,size);
   }
   return cal;
 }
 
-double selectPos(List* list,int row,int cols){
+double selectPos(List* list,int row,int cols,int size){
   List* pointer = list;
   Node* pointer2;
-  Node* pointer3;
   int zero;
-  int size=readSize();
   int i=0;
   int j=0;
-  // for(i=0;i<row;i++){
-  //   pointer= pointer->next;
-  //   pointer2 = pointer->listNode->header;
-  //   for(j=0;j<size;j++){
-  //     printf("%lf ",pointer2->num);
-  //     pointer2= pointer2->next;
-  //   }
-  // }
   for(i=0;i<size;i++){
     if(pointer->row == row){
       zero = 1;
@@ -260,35 +220,24 @@ double selectPos(List* list,int row,int cols){
   pointer2= pointer->listNode->header;
 
   if(zero == 1){
-    // printf("Existe esa fila\n");
     for(i=0;i<size;i++){
-      // printf("columna %d \n",pointer2->col);
       if(pointer2->col == cols){
-        // printf("existe esa columna");
         return pointer2->num;
       }else{
         if(pointer2->col >= cols){
-          // printf("Se exede el valor de la columna");
           i=size;
         }else{
           if(pointer2->next){
-            // printf("No existe esa columan");
             pointer2= pointer2->next;
           }else{
-            // printf("ERROR: NO HAY MAS NODOS EN ESTA LISTA: ERROR 300");
             i=size;
           }
         }
       }
     }
   }else{
-    // printf("No existe esa fila\n");
   }
-
-
-  // printf("finalizando");
   return 0;
-
 }
 
 List* multiCal(List* list1,List* list2,int size){
@@ -301,14 +250,12 @@ List* multiCal(List* list1,List* list2,int size){
     listNode = createListNode();
     for(j=0;j<size;j++){
       num = calculate(list1,list2,i,j,size);
-      printf(" %lf",num);
       if (num != 0){
         node= createNode(j,num);
         insertNode(listNode,node);
       }
     }
 
-    printf("el valor de row enviado es %d\n",i);
     if(listNode->header){
       insertList(lN,listNode,i);
       listNode = NULL;
@@ -327,53 +274,151 @@ List* calPow(List* list,int pow,int size){
   lN = list;
   for(i=0;i<pow-1;i++){
     lN = multiCal(list,lN,size);
-    printList(lN);
   }
   return lN;
 }
 
+void deleteListNode(ListNode* listNode){
+  int next=0;
+  ListNode* pointerListNode = listNode;
+  Node* pointerTrash;
+
+  while(next==0){
+    if(pointerListNode->header->next){
+      pointerTrash = pointerListNode->header;
+      pointerListNode->header=pointerListNode->header->next;
+      free(pointerTrash);
+    }else{
+      next=1;
+      pointerTrash = listNode->footer;
+
+      free(pointerTrash);
+    }
+  }
+  free(listNode);
+}
+
+void deleteList(List* list){
+  int next=0;
+  List* pointer = list;
+  List* pointerTrash;
+
+  while(next==0){
+    if(pointer->next){
+      pointerTrash = list;
+      pointer=pointer->next;
+      deleteListNode(pointerTrash->listNode);
+      free(pointerTrash);
+    }else{
+      next=1;
+      deleteListNode(pointerTrash->listNode);
+      free(pointer);
+    }
+  }
+  free(list);
+}
+
+int sizeList(List* list){
+  List* pointer = list;
+  ListNode* pointerListNode;
+  int sizeNode= sizeof(Node);
+  int sizeListNode = sizeof(ListNode);
+  int sizeList = 0;
+  int count = 0;
+
+  // printf("%d",pointer->row);
+  while(pointer->next != NULL){
+    pointerListNode=pointer->listNode;
+    count=pointerListNode->size;
+    // printf("columnas count %d\n",count);
+    sizeList = sizeList + count * sizeNode + sizeListNode;
+    // printf("tamaño de la fila %d\n",sizeList);
+    pointer= pointer->next;
+  }
+    pointerListNode=pointer->listNode;
+    count=pointerListNode->size;
+    // printf("columnas count %d\n",count);
+    sizeList = sizeList + count * sizeNode + sizeListNode;
+    return sizeList;
+}
+
+void printListNode(ListNode* listNode,int size){
+  Node* pointerNode = listNode->header; 
+  int next2 = 0;
+  int j=0;
+
+  while(next2==0){
+    if(pointerNode->next){
+      if(pointerNode->col==j){
+        printf(" %0.lf",pointerNode->num);
+        pointerNode = pointerNode->next;
+        j++;
+      }else{
+        printf(" %0.lf",0.0);
+        j++;
+      }
+    }else{
+      if(pointerNode->col==j){
+        printf(" %0.lf",pointerNode->num);
+        j++;
+        if(j>=size){
+          next2=1;
+        }
+      }else{
+        printf(" %0.lf",0.0);
+        j++;
+        if(j>=size){
+          next2=1;
+        }
+      }
+    }
+  }
+}
+
+void printListComplete(List* list, int size){
+  int i,j;
+  int next,next2;
+  List* pointer;
+  ListNode* pointer2;
+  Node* pointerNode;
+  pointer = list;
+  i=0;
+  next=0;
+  while(next==0){
+    j=0;
+    next2=0;
+    // printf("%d",pointer->row);
+    if(pointer->next){
+      if(pointer->row==i){
+        // printf("panda");
+        printListNode(pointer->listNode,size);
+        pointer=pointer->next;
+        i++;
+      }else{
+        for(j=0;j<size;j++){
+          printf(" %lf",0.0);
+          i++;
+          pointer=pointer->next;
+        }
+      }
+    }else{
+      printListNode(pointer->listNode,size);
+      next=1;
+    }
+    printf("\n");
+  }
+
+}
 
 
 int main(){
-  int size= readSize();
+  int size = readSize();
+  int pow = readPow(); 
   welcome();
-  // ListNode* ln1 = createListNode();
-  // int i,num;
-  // Node* node;
-  // for(i=0;i<10;i++){
-  //   printf("ingresa un nuevo nodo : ");
-  //   scanf("%d",&num);
-  //   node = createNode(i,num);
-  //   insertNode(ln1,node);
-  //   // printf("Valor de size: %d",ln1->size);
-  // }
-  // List* list = createList();
-  // insertList(list,ln1,0);
-  // printf("La lista tiene una columna Row:%d y el tamanio de esa lista %d",list->row,list->listNode->size);
-  // insertList(list,ln1,1);
-  // printf("La lista tiene una columna Row:%d",list->next->row);
-  // if(list->next == NULL){
-  //   printf("Es nulo");
-  // }
-
-
   List* l1 = readFile();
-  printf("Finalizo\n");
-  // printf("%d\n",l1->listNode->size);
-  // printf("%.0lf\n",l1->next->next->next->listNode->header->num);
-
-  printList(l1);
-  printf("FInal\n");
-  // double cal = selectPos(l1,2,0);
-  // printf("finalizo");
-  // printf("Imprimir cal:%lf",cal);
-  // cal = calculate(l1,l1,2,2,size);
-  // printf("\n\n imprimir cal:%lf\n\n",cal);
-  // List* lN = multiCal(l1,l1,3);
-  // printList(lN);
-  List* lN2 = calPow(l1,3,3);
-  printList(lN2);
-  // printf("El valor es %d",ln1->size);
-  // printf("EL valor de la ultima posicion es: %lf",ln1->footer);
+  List* lR = calPow(l1,pow,size);
+  printListComplete(lR,size);
+  printf("El espacio de la matriz dispersa, usando la estrutura de listas es: %d\n",sizeList(lR));
+  printf("El espacio de la matriz habria sido la siguiente: %d \n",size*size*8);
   return 0;
 }
