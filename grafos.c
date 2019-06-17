@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 typedef struct Node{
-    int vertice;
-    int costo;
+    short int vertice;
+    short int size;
     struct Node* siguiente;
 }Node;
 
@@ -23,10 +23,10 @@ List* crearLista(int vertice){
     return lista;
 }
 
-Node* crearNodo(int vertice, int costo){
+Node* crearNodo(int vertice,int size){
     Node* nodo = (Node*) malloc(sizeof(nodo));
     nodo->vertice = vertice;
-    nodo->costo = costo;
+    nodo->size = size;
     nodo->siguiente = NULL;
     return nodo;
 }
@@ -49,11 +49,12 @@ void insertarNodo(List* lista, Node* nodo){
     }
 }
 
-void insertarNodoLista(List* lista, int vertice, int vertice2, int costo){
+void insertarNodoLista(List* lista, int vertice, int vertice2,int size){
     int count=0;
     int find=0;
     List* puntero = lista;
-    Node* nodo = crearNodo(vertice2,costo);
+    printf("size :%d\n",size);
+    Node* nodo = crearNodo(vertice2,size);
 
     
 
@@ -114,14 +115,14 @@ void imprimirNodo(Node* nodo){
             if(puntero->siguiente){
                 // printf(" %d , %d",puntero->vertice,puntero->costo);
                 printf(" %d",puntero->vertice);
-                // printf(" - ");
-                // printf(" %d",puntero->costo);
+                printf(",");
+                printf("%d",puntero->size);
                 puntero = puntero->siguiente;
             }else{
                 // printf(" %d , %d",puntero->vertice,puntero->costo);
                 printf(" %d",puntero->vertice);
-                // printf(" - ");
-                // printf(" %d",puntero->costo);
+                printf(",");
+                printf("%d",puntero->size);
                 count=1;
             }
         }
@@ -157,15 +158,14 @@ void imprimirLista(List* lista){
 
 int main(){
     List* lista = crearLista(1);
+    // printf("tamaño: %d",sizeof(Node));
     insertarLista(lista,2);
     insertarLista(lista,3);
     insertarNodoLista(lista,1,3,1);
-    insertarNodoLista(lista,1,4,1);
-    insertarNodoLista(lista,2,6,2);
-    insertarNodoLista(lista,2,1,1);
-    insertarNodoLista(lista,3,2,1);
-    insertarNodoLista(lista,3,3,1);
-    insertarNodoLista(lista,1,5,1);
+    insertarNodoLista(lista,1,4,2);
+    insertarNodoLista(lista,2,6,1);
+    insertarNodoLista(lista,2,1,2);
+    insertarNodoLista(lista,3,2,3);
     imprimirLista(lista);
     printf("crear lista");
     return 0;
